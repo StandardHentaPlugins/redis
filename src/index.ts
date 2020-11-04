@@ -1,5 +1,5 @@
-import * as asyncRedis from 'async-redis';
-import RedisSerializer from './serializer';
+import asyncRedis from 'async-redis';
+import RedisSerializer from './serializer.js';
 
 export default class RedisPlugin {
   henta: any;
@@ -29,6 +29,10 @@ export default class RedisPlugin {
   set(key, value) {
     this.redisCache.set(key, value);
     return this.client.set(`${this.tag}::${key}`, value);
+  }
+
+  async add(key, value) {
+    return this.set(key, +(await this.get(key, 0)) + +value);
   }
 
   del(key) {
